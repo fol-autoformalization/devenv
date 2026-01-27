@@ -1,12 +1,10 @@
 #!/usr/bin/env sh
 docker run \
-  -e USER="$USER" -e LOGNAME="$USER" \
-  -e HOME="/tmp/home" \
+  -e LOCAL_UID="$(id -u)" \
+  -e LOCAL_GID="$(id -g)" \
+  -e USER="$USER" \
+  -e GROUP_NAME="$(id -gn)" \
   -v "$PWD:/hf-grpo-tutorial" \
   -w /hf-grpo-tutorial \
   --gpus all \
   --rm -it devshell bash
-
-#   this doesn't work as of now:
-#   --user "$(id -u)":"$(id -g)" \
-#   TODO: make the above work
