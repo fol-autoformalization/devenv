@@ -23,11 +23,16 @@ fi
 
 # Get the actual username for the UID (in case it already existed)
 ACTUAL_USER=$(getent passwd "$USER_ID" | cut -d: -f1)
-
+    
 # Set up home directory
 export HOME="/home/$ACTUAL_USER"
-mkdir -p "$HOME"
 chown "$USER_ID:$GROUP_ID" "$HOME"
+
+# So that if we get to ssh into the container, like in vast,
+# Creating new terminals from tmux/vscode activates the venv
+echo "source /workspace/.venv/bin/activate" >> "$HOME/.bashrc"
+
+# chown -R "$USER_ID:$GROUP_ID" /workspace/
 
 # Execute command as the user
 exec gosu "$ACTUAL_USER" "$@"

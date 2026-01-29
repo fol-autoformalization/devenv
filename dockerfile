@@ -19,7 +19,15 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8
 
+ENV UV_INSTALL_DIR=/usr/local/bin
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
+ENV UV_CACHE_DIR=/opt/uv/cache \
+    UV_PYTHON_INSTALL_DIR=/opt/uv/python
+
+RUN mkdir -p /opt/uv/cache /opt/uv/python && chmod -R 0777 /opt/uv
+
+WORKDIR /workspace
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
