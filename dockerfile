@@ -25,7 +25,12 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV UV_CACHE_DIR=/opt/uv/cache \
     UV_PYTHON_INSTALL_DIR=/opt/uv/python
 
-RUN mkdir -p /opt/uv/cache /opt/uv/python && chmod -R 0777 /opt/uv
+# Create uvcache group, add root to it, set group ownership with write perms
+RUN groupadd uvcache \
+    && usermod -aG uvcache root \
+    && mkdir -p /opt/uv/cache /opt/uv/python \
+    && chown -R root:uvcache /opt/uv \
+    && chmod -R 0775 /opt/uv
 
 WORKDIR /workspace
 

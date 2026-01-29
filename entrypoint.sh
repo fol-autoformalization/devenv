@@ -23,7 +23,10 @@ fi
 
 # Get the actual username for the UID (in case it already existed)
 ACTUAL_USER=$(getent passwd "$USER_ID" | cut -d: -f1)
-    
+
+# Add user to uvcache group for shared cache access
+usermod -aG uvcache "$ACTUAL_USER"
+
 # Set up home directory
 export HOME="/home/$ACTUAL_USER"
 chown "$USER_ID:$GROUP_ID" "$HOME"
