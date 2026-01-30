@@ -25,9 +25,11 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV UV_CACHE_DIR=/opt/uv/cache \
     UV_PYTHON_INSTALL_DIR=/opt/uv/python
 
-# Create uvcache group, add root to it, set group ownership with write perms
+# Create shared groups for uv cache and workspace
 RUN groupadd uvcache \
+    && groupadd workspace \
     && usermod -aG uvcache root \
+    && usermod -aG workspace root \
     && mkdir -p /opt/uv/cache /opt/uv/python \
     && chown -R root:uvcache /opt/uv \
     && chmod -R 0775 /opt/uv
@@ -38,7 +40,11 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 COPY pyproject.toml uv.lock ./
 ENV PATH="/root/.local/bin:${PATH}"
-RUN uv sync
+RUN uv sync \
+    && chown -R root:uvcache /opt/uv \
+    && chmod -R g+w /opt/uv \
+    && chown -R root:workspace /workspace \
+    && chmod -R g+w /workspace
 
 # Set up entrypoint
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

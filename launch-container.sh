@@ -7,4 +7,4 @@ docker run \
   -v "$PWD:/hf-grpo-tutorial" \
   -w /hf-grpo-tutorial \
   --gpus all \
-  --rm -it devshell bash
+  --rm -it devenv bash
