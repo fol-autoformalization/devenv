@@ -36,8 +36,6 @@ RUN groupadd uvcache \
 
 WORKDIR /workspace
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-
 COPY pyproject.toml uv.lock ./
 ENV PATH="/root/.local/bin:${PATH}"
 RUN uv sync \
